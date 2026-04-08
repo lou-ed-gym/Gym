@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gym App</title>
+
+<style>
+body { font-family: Arial; text-align: center; }
+.page { display: none; }
+.active { display: block; }
+table { margin: auto; border-collapse: collapse; }
+td, th { border: 1px solid black; padding: 8px; cursor: pointer; }
+button { padding: 10px 20px; margin: 10px; }
+.timer { color: red; font-weight: bold; }
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+  <h2>Gym App</h2>
+  <button onclick="goToPage(2)">Start</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+  <h3>Upper Day</h3>
+
+  <table>
+    <tr>
+      <th>Exercise</th>
+      <th>Warm Up</th>
+      <th>Working</th>
+      <th>De-load</th>
+    </tr>
+
+    <tr onclick="openExercise(this)">
+      <td>Lat pulldown</td><td>45</td><td>55</td><td>50</td>
+    </tr>
+    <tr onclick="openExercise(this)">
+      <td>Upper back</td><td>25</td><td>32.5</td><td>30</td>
+    </tr>
+    <tr onclick="openExercise(this)">
+      <td>Low row</td><td>30</td><td>37.25</td><td>32.5</td>
+    </tr>
+    <tr onclick="openExercise(this)">
+      <td>Chest press</td><td>35</td><td>42.5</td><td>37.5</td>
+    </tr>
+    <tr onclick="openExercise(this)">
+      <td>Vertical traction</td><td>45</td><td>55</td><td>50</td>
+    </tr>
+    <tr onclick="openExercise(this)">
+      <td>Shoulder press</td><td>7.5</td><td>10</td><td>7.5</td>
+    </tr>
+  </table>
+
+  <button>Edit</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+  <h3 id="exerciseTitle"></h3>
+
+  <table>
+    <tr>
+      <th>Exercise</th>
+      <th>Warm Up</th>
+      <th class="timer">60s</th>
+      <th>Working</th>
+      <th class="timer">60s</th>
+      <th>De-load</th>
+    </tr>
+    <tr id="exerciseRow"></tr>
+  </table>
+
+  <p id="countdown"></p>
+</div>
+
+<script>
+function goToPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + page).classList.add('active');
+}
+
+function openExercise(row) {
+  const cells = row.children;
+  document.getElementById('exerciseTitle').innerText = cells[0].innerText;
+
+  document.getElementById('exerciseRow').innerHTML = `
+    <td>${cells[0].innerText}</td>
+    <td onclick="startTimer()">${cells[1].innerText}</td>
+    <td class="timer" id="t1"></td>
+    <td onclick="startTimer()">${cells[2].innerText}</td>
+    <td class="timer" id="t2"></td>
+    <td onclick="finish()">${cells[3].innerText}</td>
+  `;
+
+  goToPage(3);
+}
+
+function startTimer() {
+  let time = 60;
+  const display = document.getElementById('countdown');
+  display.innerText = time;
+
+  const interval = setInterval(() => {
+    time--;
+    display.innerText = time;
+    if (time <= 0) clearInterval(interval);
+  }, 1000);
+}
+
+function finish() {
+  goToPage(1);
+}
+</script>
+
+</body>
+</html
